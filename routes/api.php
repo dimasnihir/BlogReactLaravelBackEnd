@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Resources\PostResource;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +22,16 @@ Route::post('/login', 'App\Http\Controllers\AuthController@login');
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', 'App\Http\Controllers\AuthController@logout');
     Route::get('/user', 'App\Http\Controllers\AuthController@user');
+
+    Route::get('/posts', 'App\Http\Controllers\AuthController@user');
+
+});
+
+
+Route::get('posts',  function() {
+    return PostResource::collection(Post::Paginate(2));
+});
+
+Route::get('post/{id}',  function($id) {
+    return new PostResource(Post::findOrFail($id));
 });
